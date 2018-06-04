@@ -12,7 +12,7 @@ Optionally defined the output folder:
 ```
 ./request.py path_to_the_query --out_path output_dir --out_file name_of_the_output
 ```
-The simimarity ranking result is written in a *csv* file where each line refere to a pair {sphere_idx, similarity_score}, ranked in descending order (according to the similariy score).
+The simimarity ranking result is written in a **csv** file where each line refere to a pair `{sphere_idx, similarity_score}`, ranked in descending order (according to the similariy score).
 It may have mutiple occurance of the same sphere idx, if the original panorama have been spilted in the offline stage.
 
 ## Building database
@@ -36,4 +36,4 @@ You can precise the absolute path of the graph file location like this:
 ```
 
 ## Miscellaneous
-To display help and all parameters, use *-h*
+To display help and all parameters, use `-h`
