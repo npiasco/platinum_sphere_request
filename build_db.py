@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/home/npiasco/anaconda3/envs/py35/bin/python
 import torch.utils.data
 import argparse
 import os
@@ -16,7 +16,7 @@ parser.add_argument("--net", default="data/default_net.pth", help="Net image des
 args = parser.parse_args()
 
 #  Loading serialized data
-net = torch.load(args.net)
+net = torch.load(args.net).cpu().eval()
 
 modtouse = ['rgb']
 transform = {
@@ -24,7 +24,7 @@ transform = {
     'rgb': (tf.ToTensor(), ),
 }
 
-root_to_folders = os.environ.get('PLATINUM', '/home/nathan/Dev/Code/platinum/') + 'data/'
+root_to_folders = os.environ.get('PLATINUM', '/home/nathan/Dev/Code/platinum/')
 dataset = Data.Platinum(root=root_to_folders,
                                  file=args.input,
                                  modalities=modtouse,
@@ -37,6 +37,6 @@ dataloader = torch.utils.data.DataLoader(dataset,
 
 dataset_feats = [(net(torch.autograd.Variable(example['rgb'],
                                               requires_grad=False)).squeeze().data.numpy(),
-                  example['idx'].numpy()) for example in dataloader]
+                  example['idx'].squeeze().numpy()) for example in dataloader]
 
 torch.save(dataset_feats, 'data/default.db')

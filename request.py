@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/home/npiasco/anaconda3/envs/py35/bin/python
 import torch
 import argparse
 import PIL.Image
@@ -17,7 +17,7 @@ parser.add_argument("--net", default="data/default_net.pth", help="Net image des
 args = parser.parse_args()
 
 #  Loading serialized data
-net = torch.load(args.net)
+net = torch.load(args.net).cpu().eval()
 db = torch.load(args.db)
 
 transform = tf.Compose(
