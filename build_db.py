@@ -12,10 +12,15 @@ import dl_management.datasets.multmodtf as tf
 parser = argparse.ArgumentParser(description="Precompute signature of database sphere")
 parser.add_argument("input", metavar="Input_Graph", help="Input Graph File")
 parser.add_argument("--net", default="data/default_net.pth", help="Net image descriptor to use")
+parser.add_argument("--root", default="/DATA/out/ibensalah/graphs/", help="Data folder")
+parser.add_argument("--jobs", default=8, help="Number of jobs")
+parser.add_argument("--split", default=True, help="Split panoramic")
+parser.add_argument("--out_path", default="data/", help="Output location of the database signatures")
+parser.add_argument("--out_file", default="default.db", help="Output file name")
 
 args = parser.parse_args()
 
-#  Loading serialized data
+#  Loading serialized network
 net = torch.load(args.net).cpu().eval()
 
 modtouse = ['rgb']
@@ -24,19 +29,27 @@ transform = {
     'rgb': (tf.ToTensor(), ),
 }
 
-root_to_folders = os.environ.get('PLATINUM', '/home/nathan/Dev/Code/platinum/')
-dataset = Data.Platinum(root=root_to_folders,
-                                 file=args.input,
-                                 modalities=modtouse,
-                                 transform=transform)
+params  =  {
+    'root':args.root,
+    'file':args.input,
+    'modalities': modtouse,
+    'transform':transform
+}
+
+if not args.split:
+    params['panorama_split'] = None
+
+
+dataset = Data.Platinum(**params)
+
 
 dataloader = torch.utils.data.DataLoader(dataset,
                                          batch_size=1,
                                          shuffle=False,
-                                         num_workers=8)
+                                         num_workers=args.jobs)
 
 dataset_feats = [(net(torch.autograd.Variable(example['rgb'],
                                               requires_grad=False)).squeeze().data.numpy(),
                   example['idx'].squeeze().numpy()) for example in dataloader]
 
-torch.save(dataset_feats, 'data/default.db')
+torch.save(dataset_feats, args.out_path + args.out_file)

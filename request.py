@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser(description="Find the nearest RGBDL sphere")
 parser.add_argument("input", metavar="Input_Image", help="Input Image File")
 parser.add_argument("--db", default="data/default.db", help="Database file contening sphere signatures")
 parser.add_argument("--net", default="data/default_net.pth", help="Net image descriptor to use")
+parser.add_argument("--out_path", default=".", help="Output location of the ranking results")
+parser.add_argument("--out_file", default="scores", help="Output file name (+.csv)")
 
 args = parser.parse_args()
 
@@ -41,7 +43,7 @@ query_signature = net(
 diff = [np.dot(query_signature, d_feat[0]) for d_feat in db]
 sorted_index = list(np.argsort(diff))
 output = [(db[i][1], diff[i]) for i in reversed(sorted_index)]
-output_file = 'results.csv'
+output_file = args.out_path + args.out_file + '.csv'
 with open(output_file, 'w') as f:
     for l in output:
         f.write(str(l[0]) + ',' + str(l[1]) + '\n')
