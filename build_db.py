@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import torch
+import torch.utils.data
 import argparse
 import os
-import SphereDataset as Data
+import dl_management.datasets.Platinum as Data
+import dl_management.datasets.multmodtf as tf
 
 
 # Activate virtual env -> https://stackoverflow.com/questions/6943208/activate-a-virtualenv-with-a-python-script
@@ -19,15 +20,15 @@ net = torch.load(args.net)
 
 modtouse = ['rgb']
 transform = {
-    'first': (Data.Resize((224,224)),),
-    'rgb': (Data.ToTensor(), ),
+    'first': (tf.Resize((224, 224)),),
+    'rgb': (tf.ToTensor(), ),
 }
 
 root_to_folders = os.environ.get('PLATINUM', '/home/nathan/Dev/Code/platinum/') + 'data/'
-dataset = Data.SphereDataset(root=root_to_folders,
-                             file=args.input,
-                             modalities=modtouse,
-                             transform=transform)
+dataset = Data.Platinum(root=root_to_folders,
+                                 file=args.input,
+                                 modalities=modtouse,
+                                 transform=transform)
 
 dataloader = torch.utils.data.DataLoader(dataset,
                                          batch_size=1,
@@ -35,8 +36,7 @@ dataloader = torch.utils.data.DataLoader(dataset,
                                          num_workers=8)
 
 dataset_feats = [(net(torch.autograd.Variable(example['rgb'],
-                                                  requires_grad=False)).squeeze().data.numpy(),
+                                              requires_grad=False)).squeeze().data.numpy(),
                   example['idx'].numpy()) for example in dataloader]
-
 
 torch.save(dataset_feats, 'data/default.db')
