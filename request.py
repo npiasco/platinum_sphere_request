@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description="Find the nearest RGBDL sphere")
 parser.add_argument("input", metavar="Input_Image", help="Input Image File")
 parser.add_argument("--db", default="data/default.db", help="Database file contening sphere signatures")
 parser.add_argument("--net", default="data/default_net.pth", help="Net image descriptor to use")
-parser.add_argument("--out_path", default=".", help="Output location of the ranking results")
+parser.add_argument("--out_path", default="", help="Output location of the ranking results")
 parser.add_argument("--out_file", default="scores", help="Output file name (+.csv)")
 
 args = parser.parse_args()
