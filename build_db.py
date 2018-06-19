@@ -4,9 +4,7 @@ import argparse
 import dl_management.datasets.Platinum as Data
 import dl_management.datasets.multmodtf as tf
 import os 
-
-
-# Activate virtual env -> https://stackoverflow.com/questions/6943208/activate-a-virtualenv-with-a-python-script
+import tqdm
 
 
 parser = argparse.ArgumentParser(description="Precompute signature of database sphere")
@@ -15,14 +13,17 @@ parser.add_argument("--net", default=None, help="Net image descriptor to use")
 parser.add_argument("--root", default="/DATA/out/ibensalah/graphs/", help="Data folder")
 parser.add_argument("--jobs", default=8, help="Number of jobs")
 parser.add_argument("--split", default=True, help="Split panoramic")
-parser.add_argument("--out_path", default="data/", help="Output location of the database signatures")
+parser.add_argument("--out_path", default=None, help="Output location of the database signatures")
 parser.add_argument("--out_file", default="default.db", help="Output file name")
 
 args = parser.parse_args()
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 if args.net is None:
-    dir_path = os.path.dirname(os.path.realpath(__file__))
     args.net = dir_path + '/data/default_net.pth'
+if args.net is None:
+    args.out_path = dir_path + '/data/
+
 
 #  Loading serialized network
 net = torch.load(args.net).cpu().eval()
@@ -54,6 +55,6 @@ dataloader = torch.utils.data.DataLoader(dataset,
 
 dataset_feats = [(net(torch.autograd.Variable(example['rgb'],
                                               requires_grad=False)).squeeze().data.numpy(),
-                  example['idx'].squeeze().numpy()) for example in dataloader]
+                  example['idx'].squeeze().numpy()) for example in tqdm.tqdm(dataloader)]
 
 torch.save(dataset_feats, args.out_path + args.out_file)
