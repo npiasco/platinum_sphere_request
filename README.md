@@ -20,7 +20,7 @@ It may have mutiple occurance of the same sphere idx, if the original panorama h
 This offline step have to been performed when the spheres database is updated, in order to mainten proper signature for the similarity comparison.
 Launch the python script like this:
 ```
-./update_db.py graph_csv_file
+./build_db.py graph_csv_file
 ```
 Input csv file must have the following architecture:
 ```
@@ -32,7 +32,7 @@ Input csv file must have the following architecture:
 ```
 You can precise the absolute path of the graph file location like this:
 ```
-./update_db.py graph_csv_file --root path_to_data_folder
+./build_db.py graph_csv_file --root path_to_data_folder
 ```
 
 ## Miscellaneous
