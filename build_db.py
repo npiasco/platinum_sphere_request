@@ -22,7 +22,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 if args.net is None:
     args.net = dir_path + '/data/default_net.pth'
 if args.net is None:
-    args.out_path = dir_path + '/data/
+    args.out_path = dir_path + '/data/'
 
 
 #  Loading serialized network
@@ -41,7 +41,7 @@ params  =  {
     'transform':transform
 }
 
-if not args.split:
+if args.split == 'False':
     params['panorama_split'] = None
 
 
