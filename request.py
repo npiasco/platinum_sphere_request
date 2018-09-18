@@ -5,7 +5,10 @@ import PIL.Image
 import torchvision.transforms as tf
 from dl_management.networks.CustomArchi import DeploymentNet
 import numpy as np
+import logging
 
+logger = logging.getLogger()
+logger.setLevel('ERROR')
 
 # Activate virtual env -> https://stackoverflow.com/questions/6943208/activate-a-virtualenv-with-a-python-script
 

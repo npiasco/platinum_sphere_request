@@ -1,4 +1,5 @@
 #!/home/npiasco/anaconda3/envs/py35/bin/python
+import logging 
 import torch.utils.data
 import argparse
 import dl_management.datasets.Platinum as Data
@@ -6,7 +7,8 @@ import dl_management.datasets.multmodtf as tf
 from dl_management.networks.CustomArchi import DeploymentNet
 import os 
 import tqdm
-
+logger = logging.getLogger()
+logger.setLevel('ERROR')
 
 parser = argparse.ArgumentParser(description="Precompute signature of database sphere")
 parser.add_argument("input", metavar="Input_Graph", help="Input Graph File")
@@ -21,7 +23,6 @@ parser.set_defaults(old_v=False)
 
 
 args = parser.parse_args()
-print(args)
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 if args.net is None:
