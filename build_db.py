@@ -34,7 +34,8 @@ if args.out_path is None:
 modtouse = ['rgb']
 transform = {
     'first': (tf.Resize((224, 224)),),
-    'rgb': (tf.ToTensor(),
+    'rgb': (tf.RandomVerticalFlip(p=1),
+            tf.ToTensor(),
             tf.Normalize(mean=[0.6406, 0.6457, 0.6116], std=[0.3180, 0.3017, 0.3233])
             ),
 }
