@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(description="Precompute signature of database s
 parser.add_argument("input", metavar="Input_Graph", help="Input Graph File")
 parser.add_argument("--net", default=None, help="Net image descriptor to use")
 parser.add_argument("--root", default='', help="Data folder")
-parser.add_argument("--jobs", default=8, help="Number of jobs")
+parser.add_argument("--jobs", default=8, help="Number of jobs", type=int)
 parser.add_argument("--split", default=True, help="Split panoramic")
 parser.add_argument("--out_path", default=None, help="Output location of the database signatures")
 parser.add_argument("--out_file", default="default.db", help="Output file name")
