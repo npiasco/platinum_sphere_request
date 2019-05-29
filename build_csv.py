@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 parser = argparse.ArgumentParser(description="Precompute csv file")
 parser.add_argument("input", metavar="Data_folder", help="Path to the data folder containing the data")
 parser.add_argument("--output", default="dataset", help="Name of the output file")
+parser.add_argument("--prune", default=2, help="Pruning factor", type=int)
 parser.add_argument("--xml", dest='xml', action='store_true', help="Xml info (for stereopolis perspective images)")
 parser.set_defaults(xml=False)
 
@@ -20,7 +21,8 @@ else:
     im_name = 'rgb/'
 
 p = path.Path(args.input + im_name)
-rgb_files = [im_name + file.name for file in sorted(p.iterdir()) if file.is_file()]
+rgb_files = [im_name + file.name for i, file in enumerate(sorted(p.iterdir())) if file.is_file() and
+             '-300-' not in file.name and i%args.prune == 0]
 
 if args.xml:
     depth_name = 'png/'
@@ -28,7 +30,8 @@ else:
     depth_name = 'depth/'
 
 p = path.Path(args.input + depth_name)
-depth_files = [depth_name + file.name for file in sorted(p.iterdir()) if file.is_file()]
+depth_files = [depth_name + file.name for i, file in enumerate(sorted(p.iterdir())) if file.is_file() and
+              i%args.prune == 0]
 
 if args.xml:
     sem_name = 'png/'
@@ -36,8 +39,8 @@ else:
     sem_name = 'intensity/'
 
 p = path.Path(args.input + sem_name)
-sem_files = [sem_name + file.name for file in sorted(p.iterdir()) if file.is_file()]
-
+sem_files = [sem_name + file.name for i, file in enumerate(sorted(p.iterdir())) if file.is_file() and
+             i%args.prune == 0]
 
 coords = list()
 if args.xml:
