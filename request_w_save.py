@@ -48,7 +48,7 @@ if args.old_v:
 else:
     weights = torch.load(args.net)
     net = DeploymentNet()
-    #net.load_state_dict(weights)
+    net.load_state_dict(weights)
 
 query_signature = net(
     torch.autograd.Variable(
@@ -106,4 +106,4 @@ request = PIL.Image.open(args.input)
 request.save(saving_dir + '/request.jpg')
 
 for i in range(5):
-    dataset[output[i][0][0]]['rgb'].save(saving_dir + '/{}.jpg'.format(i))
+    dataset[int(output[i][0])]['rgb'].save(saving_dir + '/{}.jpg'.format(i))
